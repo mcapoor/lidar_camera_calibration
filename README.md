@@ -146,11 +146,12 @@ In this launch file, you should only need to change the parameters `num_of_marke
 
 In a terminal,
 
-1. `cd /path/to/lidar_calibration-docker/`
+1. `cd /path/to/lidar_calibration_docker/`
 2. `docker build -t lidar_calibration .`
-3. `docker run -it lidar_calibration`
-4. `export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:/catkin_ws2/src`
-5. `roslaunch spot_driver driver.launch username:=user password:=bigbubbabigbubba hostname:=128.148.140.23`
+3. `docker run -v 'data:/catkin_ws/data' -v /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket -v /dev:/
+dev --network=host -e "DISPLAY=unix$DISPLAY" -e "QT_X11_NO_MITSHM=1" -v "/tmp/.X11-unix:/tmp/.X11-unix:rw" -it lidar_calibration`
+4. `source devel/setup.sh`
+5. `roslaunch lidar_camera_calibration find_transform.launch`
 
 ## Usage
 
