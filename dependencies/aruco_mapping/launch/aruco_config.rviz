@@ -1,4 +1,4 @@
-Panels:
+s1Panels:
   - Class: rviz/Displays
     Help Height: 78
     Name: Displays
