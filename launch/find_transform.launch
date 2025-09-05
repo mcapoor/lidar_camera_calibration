@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<launch>
+  <param name="/use_sim_time" value="true"/> 
+  
+  <!-- RVIZ -->
+ <node name="rviz" pkg="rviz" type="rviz" args="-d $(find aruco_mapping)/launch/aruco_config.rviz" />
+
+  <!-- ArUco mapping -->
+  <node pkg="aruco_mapping" type="aruco_mapping" name="aruco_mapping" output="screen">
+    <remap from="/camera/left/image" to="/aruco_camera/left/image"/>
+s
+    <param name="calibration_file" type="string" value="$(find lidar_camera_calibration)/conf/aruco_calibration.ini" /> 
+    <param name="num_of_markers" type="int" value="2" />
+    <param name="marker_size" type="double" value="0.165"/>
+    <param name="space_type" type="string" value="plane" />
+    <param name="roi_allowed" type="bool" value="false" />
+  </node>
+
+  <node pkg="lidar_camera_calibration" type="find_transform" name="find_transform" output="screen">
+    <rosparam command="load" file="$(find lidar_camera_calibration)/conf/lidar_camera_calibration.yaml" />
+  </node>
+</launch>
+
