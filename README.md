@@ -69,7 +69,7 @@ For first attempt at calibration, adjust only
 
 Ensure that the Aruco markers are fixed to the calibration boards such that when hung from a corner, the markers are on the left side of the board. Arrange the boards such that Aruco ids are in ascending order.
 
-The first line of the file should be the number of markers $N$, followed by $5N$ lines
+The first line of the file should be the number of markers N, followed by 5*N lines
 
 ```
 length (s1)
