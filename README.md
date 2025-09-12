@@ -149,9 +149,12 @@ In a terminal,
 1. `cd /path/to/lidar_calibration_docker/`
 2. `docker build -t lidar_calibration .`
 
-3. ```bash
+3.
 
-docker run -v $(pwd)'data:/catkin_ws/data' -v /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket -v /dev:/dev --network=host -e "DISPLAY=unix$DISPLAY" -e "QT_X11_NO_MITSHM=1" -v "/tmp/.X11-unix:/tmp/.X11-unix:rw" -it lidar_calibration```
+```bash
+docker run -v $(pwd)'data:/catkin_ws/data' -v /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket -v /dev:/dev --network=host -e "DISPLAY=unix$DISPLAY" -e "QT_X11_NO_MITSHM=1" -v "/tmp/.X11-unix:/tmp/.X11-unix:rw" -it lidar_calibration
+```
+
 4. `source devel/setup.sh`
 
 ## Usage
