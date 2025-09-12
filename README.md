@@ -148,18 +148,18 @@ In a terminal,
 
 1. `cd /path/to/lidar_calibration_docker/`
 2. `docker build -t lidar_calibration .`
-
-3.
+3. (Optional) If you have problems running a GUI in the Docker, run `xhost +local:root` on the host machine to allow local docker containers to access the X server.
+4.
 
 ```bash
 docker run -v $(pwd)'data:/catkin_ws/data' -v /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket -v /dev:/dev --network=host -e "DISPLAY=unix$DISPLAY" -e "QT_X11_NO_MITSHM=1" -v "/tmp/.X11-unix:/tmp/.X11-unix:rw" -it lidar_calibration
 ```
 
-4. `source devel/setup.sh`
+5. `source devel/setup.sh`
 
 ## Usage
 
-Before running the package, ensure that the aruco markers are visible in the camera frame and that the markers are arranged in ascending order of their ids from left to right as viewed by the camera.
+Before running the package, ensure that the ArUco markers are visible in the camera frame and that the markers are arranged in ascending order of their ids from left to right as viewed by the camera.
 
 Run with
 `roslaunch lidar_camera_calibration find_transform.launch`
