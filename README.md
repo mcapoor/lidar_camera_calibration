@@ -67,7 +67,7 @@ For first attempt at calibration, adjust only
 
 ---
 
-Ensure that the Aruco markers are fixed to the calibration boards such that when hung from a corner, the markers are on the left side of the board. Arrange the boards such that Aruco ids are in ascending order.
+Ensure that the Aruco markers are fixed to the calibration boards such that when hung from a corner, the markers are on the left side of the board. Arrange the boards such that Aruco ids are in ascending order. Note that these *must* be the 5x5 Aruco markers.
 
 The first line of the file should be the number of markers N, followed by 5*N lines
 
@@ -148,10 +148,11 @@ In a terminal,
 
 1. `cd /path/to/lidar_calibration_docker/`
 2. `docker build -t lidar_calibration .`
-3. `docker run -v 'data:/catkin_ws/data' -v /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket -v /dev:/
-dev --network=host -e "DISPLAY=unix$DISPLAY" -e "QT_X11_NO_MITSHM=1" -v "/tmp/.X11-unix:/tmp/.X11-unix:rw" -it lidar_calibration`
+
+3. ```bash
+
+docker run -v $(pwd)'data:/catkin_ws/data' -v /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket -v /dev:/dev --network=host -e "DISPLAY=unix$DISPLAY" -e "QT_X11_NO_MITSHM=1" -v "/tmp/.X11-unix:/tmp/.X11-unix:rw" -it lidar_calibration```
 4. `source devel/setup.sh`
-5. `roslaunch lidar_camera_calibration find_transform.launch`
 
 ## Usage
 
@@ -163,3 +164,22 @@ Run with
 The package will estimate an initial transformation matrix and then prompt the user to manually mark corners of each of the rectangular board. To select a corner, click on the point and press any key. Once 4 points are clicked, each followed by a key-press, the program will move on to the next line segment. Continue marking the line segments for all boards until complete. Line segments for each board are to be marked in clock-wise order starting from the top-left.
 
 After marking all the line-segments, the rigid-body transformation between the camera and the LiDAR frame will be displayed.
+
+## Recording Bags on Spot
+
+1. ssh into the Core I/O Payload
+2. clone `https://github.com/USC-ACTLab/spot_ros2/tree/milan`
+3. Follow the instructions in `Core IO Deploy.md` below to build and run the Docker container with the Spot and Velodyne drivers.
+4. `cd /ros_ws/data && ros2 bag record -o <bag_name> <topic1> <topic2> ...`
+5. To stop recording, `Ctrl+C`
+6. exit the docker container and `exit` the ssh session
+7. on your local machine, `scp -P 20022 -r spot@ROBOT_IP_ADDRESS:~/data/<bag_name> /path/to/lidar_calibration_docker/data/`
+8. `cd /path/to/lidar_calibration_docker/`
+9. Install `rosbags` via `pip install rosbags` (might need to source a venv)
+10. `rosbags-convert --src <bag-name>/ --dst <bag-name>.bag`
+11. In `ros1_bag_camerainfo.py`, change the last line to `downgrade_camerainfo_to_rosbag1(Path('data/<bag_name>.bag'), Path('data/<bag_name>_downgraded.bag'))` to account for the different CameraInfo message structure in ros1 vs ros2.
+12. Run the script: `python3 data/ros1_bag_camerainfo.py`
+13. `cd .. && docker build -t lidar_docker .`
+14. `docker run -v '/path/to/lidar_calibration/data:/catkin_ws/data' -v /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket -v /dev:/dev --network=host -e "DISPLAY=unix$DISPLAY" -e "QT_X11_NO_MITSHM=1" -v "/tmp/.X11-unix:/tmp/.X11-unix:rw" -it lidar_docker bash`
+15. `source devel/setup.sh`
+16. `rosbag play -l /catkin_ws/data/<bag_name>_downgraded --clock`

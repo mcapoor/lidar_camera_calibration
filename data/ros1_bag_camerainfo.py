@@ -1,15 +1,13 @@
 """ This script is taken from the Rosbags package (https://ternaris.gitlab.io/rosbags/examples/edit_message_definition.html) 
 
-It downgrades the CameraInfo message definition from ROS2 to ROS1. It should be used after rosbags convert. Simply change the source and destination paths in the last line of the script and run it. """
+It downgrades the CameraInfo message definition from ROS2 to ROS1. 
+It should be used after rosbags convert. Simply change the source and destination paths in the last line of the script and run it.
 
-
-"""Edit message definition.
-
-Between ROS1 and ROS2 the CameraInfo message definition has changed.
+Original comment: 
+'Between ROS1 and ROS2 the CameraInfo message definition has changed.
 The D, K, R, and P field names have been changed from upper case to
 lower case. This example shows how to downgrade the messages in a
-rosbag1 to the proper message definition.
-
+rosbag1 to the proper message definition.'
 """
 
 from __future__ import annotations
@@ -103,4 +101,4 @@ def downgrade_camerainfo_to_rosbag1(src: Path, dst: Path) -> None:
 
             writer.write(wconn, timestamp, outdata)
 
-downgrade_camerainfo_to_rosbag1(Path('data/calibration_bag_copy.bag'), Path('data/calibration_bag_downgraded.bag'))
+downgrade_camerainfo_to_rosbag1(Path('data/5x5bag.bag'), Path('data/5x5_downgraded.bag'))

@@ -22,6 +22,7 @@ RUN apt-get update -yq && \
     apt-get install -yq --no-install-recommends \
     gcc \
     g++ \ 
+    nano \
     python3-rosdep \ 
     python3-wstool \
     python3-pip \
